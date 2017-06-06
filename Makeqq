@@ -1,0 +1,28 @@
+# -*-makefile-*-
+
+all: wf.exe parfit.exe edecay.exe
+
+wf.exe:	qqModule.o wf.o
+	gfortran -fopenmp -g -o wf.exe qqModule.o wf.o 
+
+parfit.exe: qqModule.o parfit.o
+	gfortran -fopenmp -g -o parfit.exe qqModule.o parfit.o
+
+edecay.exe: qqModule.o edecay.o
+	gfortran -fopenmp -g -o edecay.exe qqModule.o edecay.o
+
+qqModule.o: qqModule.f90
+	gfortran -fopenmp -Wall -g -c qqModule.f90 -llapack -lblas
+
+wf.o: wf.f90
+	gfortran -Wall -g -c wf.f90
+
+parfit.o: parfit.f90
+	gfortran -Wall -fopenmp -g -c parfit.f90
+
+edecay.o: edecay.f90
+	gfortran -Wall -g -c edecay.f90
+
+clean:
+	rm -f *.o
+
