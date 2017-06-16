@@ -1,6 +1,6 @@
 # -*-makefile-*-
 
-all: wf.exe parfit.exe edecay.exe
+all: wf.exe parfit.exe edecay.exe s_decay.exe s_decay_b.exe r.exe
 
 wf.exe:	qqModule.o wf.o
 	gfortran -fopenmp -g -o wf.exe qqModule.o wf.o 
@@ -10,6 +10,15 @@ parfit.exe: qqModule.o parfit.o
 
 edecay.exe: qqModule.o edecay.o
 	gfortran -fopenmp -g -o edecay.exe qqModule.o edecay.o
+
+s_decay.exe: qqModule.o s_decay.o
+	gfortran -fopenmp -g -o s_decay.exe qqModule.o s_decay.o
+
+s_decay_b.exe: qqModule.o s_decay_b.o
+	gfortran -fopenmp -g -o s_decay_b.exe qqModule.o s_decay_b.o
+
+r.exe: qqModule.o r.o
+	gfortran -fopenmp -g -o r.exe qqModule.o r.o
 
 qqModule.o: qqModule.f90
 	gfortran -fopenmp -Wall -g -c qqModule.f90 -llapack -lblas
@@ -22,6 +31,15 @@ parfit.o: parfit.f90
 
 edecay.o: edecay.f90
 	gfortran -Wall -g -c edecay.f90
+
+s_decay.o: s_decay.f90
+	gfortran -Wall -g -c s_decay.f90
+
+s_decay_b.o: s_decay_b.f90
+	gfortran -Wall -g -c s_decay_b.f90
+
+r.o: r.f90
+	gfortran -Wall -g -c r.f90
 
 clean:
 	rm -f *.o

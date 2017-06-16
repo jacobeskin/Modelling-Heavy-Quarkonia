@@ -2,9 +2,7 @@ module qqModule
 
   ! This module contains subroutines for calculating parameters and bound state
   ! wavefunctions for different quarkonium states. Subroutines are the
-  ! Midpoint method, Simpson integral and Newtons method. Even though Newtons
-  ! method is primarily used for finding foots of functions, here it is used to
-  ! find a minimum of a function.
+  ! Shooting method, Simpson integral, Line search
 
 contains
 
@@ -171,6 +169,8 @@ contains
   !-----------------------  Line Search --------------------------------------
   !---------------------------------------------------------------------------
   !---------------------------------------------------------------------------
+
+  ! Perform a line search minimization for finding the model parameters. 
 
   subroutine ln(alpha, b, c, m, sigma, k, E_m, E_c, F0, x1)
     implicit none
@@ -416,7 +416,7 @@ contains
   !----------------------------------------------------------------------
   !----------------------------------------------------------------------
 
-  !
+  ! Subroutine for calculating F in the line search. Uses OpenMP
   
   subroutine mss(alpha, b, c, m, sigma, k, E_m, E_c, F)
     use omp_lib  ! Library for OpenMP

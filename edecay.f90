@@ -16,7 +16,7 @@ program edecay
   ! Prints out the 
   
   integer :: i, ios1, ios2, k, iarg
-  double precision :: mass1, mass2, c_fi, X, Y, L
+  double precision :: mass1, mass2, c_fi, X, Y, L, j, omega
   double precision, allocatable :: u1(:), u2(:)
   character(len=80) :: file1, file2 ,arg
 
@@ -54,40 +54,58 @@ program edecay
   call get_command_argument(6,arg)
   read(arg,*) c_fi
 
+  ! If impossible kinematics
+  if (mass1<mass2) then
+     print *, "Decay impossible, mass2 bigger than mass1!"
+     stop
+  end if
+  
   ! Allocate wavefunctions
   allocate(u1(k), u2(k))
 
   ! Open files for reading and read in the wavefunctions
 
-  open(unit=1, file='file1', iostat=ios1, status='old')
+  open(unit=1, file=file1, iostat=ios1, status='old', action='read')
   if (ios1/=0) then
      print *, "Problem opening file1"
      stop
   end if
 
-  open(unit=2, file='file2', iostat=ios2, status='old')
+  open(unit=2, file=file2, iostat=ios2, status='old', action='read')
   if (ios2/=0) then
      print *, "Problem opening file2"
      stop
   end if
-
+  
   do i=1,k
      read(1,*,iostat=ios1) u1(i)
      read(2,*,iostat=ios2) u2(i)
-     u2(i) = i*u2(i)
+     j = i*1d+0
+     u2(i) = j*u2(i)
   end do
+  close(1)
+  close(2)
 
   ! Calculate the transition L
-  X = ((16d+0*c_fi)/(27d+0*137.036d+0))*((mass1-mass2)**3) ! Number part 
-  call simpson(k, Y, u1, u2)                           ! <u1|r|u2>
+  omega = (mass1**2-mass2**2)/(2*mass1)
+  ! For Charmonium
+  !X = c_fi*(16d+0/27)*(1d+0/137.036)*(omega**3)*(1d+0/(197.327**2))
+  ! For Bottomonium
+  X = c_fi*(4d+0/27)*(1d+0/137.036)*(omega**3)*(1d+0/(197.327**2))
+  call simpson(k, Y, u1, u2) ! <u1|r|u2>
   Y = Y*Y
   L = X*Y
 
   ! Print results
   print *,
+  print *, "E_gamma is:"
+  print *, omega
+  print *,
   print *, "E1 decay width is:"
   print *, L
   print *,
+
+  deallocate(u1, u2)
 
 end program edecay
 

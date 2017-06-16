@@ -107,7 +107,7 @@ program wf
   ! Allocate memory for the wave function
   allocate(u(k))
 
-  ! Call subroutine MPM from qqModule in order to get the wavefunction and E
+  ! Call subroutine shoot from qqModule in order to get the wavefunction and E
   call shoot(alpha, b, c, m, sigma, SS, l, E_0, u, k, E)
   open(unit=99, file=filename, status='unknown')
   do i=1,k
@@ -140,7 +140,7 @@ program wf
      
      ! Meson mass
      MesonMass = E + 2*m + E_LS + E_S12
-
+ 
      
 
   else
